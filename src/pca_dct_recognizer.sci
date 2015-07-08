@@ -1,10 +1,10 @@
-function [acepted, rejected] = pca_recognizer(trainSamples, testSamples)
-    brain = pca_train(trainSamples);
+function [acepted, rejected] = pca_dct_recognizer(trainSamples, testSamples)
+    brain = pca_dct_dct_train(trainSamples);
     acepted = list();
     rejected = list();
     for i=1: size(testSamples)
         sampl = testSamples(i);
-        c = pca_test(imread(sampl.path), brain);
+        c = pca_dct_test(imread(sampl.path), brain);
         if c == sampl.class then
             acepted($+1) = sampl;
         else
@@ -13,7 +13,7 @@ function [acepted, rejected] = pca_recognizer(trainSamples, testSamples)
     end
 endfunction
 
-function out = pca_train(samples)
+function out = pca_dct_train(samples)
     brain = tlist(["brain", "class", "samples"], [], list());
     for i=1:Nc
         brain.class(i) = iClass(i);
@@ -44,28 +44,28 @@ function out = pca_train(samples)
             k = k+1;
         end
         compiledBrain.class(i) = nClass;
-        compiledBrain.sampl(i) = pca_compress(A,d);
+        compiledBrain.sampl(i) = pca_dct_compress(A,d);
     end
 
     out = compiledBrain;
 endfunction
 
-function [class] = pca_test(imagem, brain)
+function [class] = pca_dct_test(imagem, brain)
     nc = size(brain.class, 1);
     for i=1:nc
         c = brain.sampl(i);
         y = c\imagem(:);
-        diffs(i)  = pca_diffImagem(imagem, c*y);
+        diffs(i)  = pca_dct_diffImagem(imagem, c*y);
     end
     [j,k] = min(diffs);
     class = brain.class(k);
 endfunction
 
-function out=pca_compress(A, d)
+function out=pca_dct_compress(A, d)
     [U S V] = sva(A, d);
     out = U*S;
 endfunction
 
-function out = pca_diffImagem(A,B)
+function out = pca_dct_diffImagem(A,B)
     out = norm(A(:) - B(:));
 endfunction
