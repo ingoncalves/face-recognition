@@ -1,7 +1,7 @@
-mode(0  )
 clc;stacksize('max');funcprot(0);getd('.');
-qtdTestes = 5;
+qtdTestes = 3;
 porcentagemMedia = 0;
+rejecteds = list();
 for i = 1 : qtdTestes
     printf("antes de chamar a funcao");
     [iClass, iTrain, iTest] = random_indexes(10, 200, 9, 14);
@@ -13,8 +13,8 @@ for i = 1 : qtdTestes
     
     [trainSamples, testSamples] = read_samples('../database/fei-200x150');//imagens do banco
     [acepted rejected] = pca_recognizer(trainSamples, testSamples);
+    rejecteds = lstcat(rejecteds, rejected);
     acertos = size(acepted);
-    
     n = size(testSamples);
     porcentagem = (acertos/n)*100;
     porcentagemMedia = porcentagem + porcentagemMedia;
@@ -26,3 +26,9 @@ end
 
 printf('RESULTADO MEDIO: %.2f%%\n', (porcentagemMedia / qtdTestes));
 
+function showRejected(rejected) 
+    for i=1: size(rejected)
+        xset('window',i)
+        imshow(imread(rejected(i).path))
+    end
+endfunction
