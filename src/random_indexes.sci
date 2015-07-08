@@ -13,5 +13,5 @@ function [iClass, iTrain, iTest] = random_indexes(nClassTrain, totalClass, nImgT
         iTrain = unique(iTrain);
     end
     
-    iTest = setdiff([1:totalImgClass], iTest);
+    iTest = setdiff([1:totalImgClass], iTrain);
 endfunction
