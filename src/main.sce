@@ -1,34 +1,13 @@
 clc;stacksize('max');funcprot(0);getd('.');
-qtdTestes = 3;
 porcentagemMedia = 0;
 rejecteds = list();
-for i = 1 : qtdTestes
-    printf("antes de chamar a funcao");
-    [iClass, iTrain, iTest] = random_indexes(10, 200, 9, 14);
-    Nc  = size(iClass,2);//Numero de classes
-    Ni  = size(iTrain,2);//Numero de imagens por classe
-    Np  = 200*150;//Numero de pixels
-    Cm = 3;//numero de camadas de cor (ex.: rgb=3, gray=1)
-    d  = 2;//dimensão para compressão do SVA
-    
-    [trainSamples, testSamples] = read_samples('../database/fei-200x150');//imagens do banco
-    [acepted rejected] = pca_recognizer(trainSamples, testSamples);
-    rejecteds = lstcat(rejecteds, rejected);
-    acertos = size(acepted);
-    n = size(testSamples);
-    porcentagem = (acertos/n)*100;
-    porcentagemMedia = porcentagem + porcentagemMedia;
-    printf('\nImagens testadas: %i\n', n);
-    printf('Acertos: %i\n',acertos);
-    printf('Porcentagem de acerto: %.2f%%\n',porcentagem)
-    printf('-------------------------------------------\n');
-end
 
-printf('RESULTADO MEDIO: %.2f%%\n', (porcentagemMedia / qtdTestes));
+Nc  = 9;//Numero de classes
+Np  = 64*64;//Numero de pixels
+Cm = 1;//numero de camadas de cor (ex.: rgb=3, gray=1)
+d  = 1;//dimensão para compressão do SVA
 
-function showRejected(rejected) 
-    for i=1: size(rejected)
-        xset('window',i)
-        imshow(imread(rejected(i).path))
-    end
-endfunction
+iClass = 1:9
+trainSamples = read_train('../database/fabbri/train');
+testSamples = read_test('../database/fabbri/test');
+pca_recognizer(trainSamples, testSamples);//bruteforce_recognizer || pca_recognizer ||pca_dct_recognizer

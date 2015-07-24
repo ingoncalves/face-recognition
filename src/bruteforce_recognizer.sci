@@ -1,15 +1,9 @@
-function [acepted, rejected] = bruteforce_recognizer(trainSamples, testSamples)
+function bruteforce_recognizer(trainSamples, testSamples)
     brain = bruteforce_train(trainSamples);
-    acepted = list();
-    rejected = list();
     for i=1: size(testSamples)
         sampl = testSamples(i);
-        c = bruteforce_test(imread(sampl.path), brain);
-        if c == sampl.class then
-            acepted($+1) = sampl;
-        else
-            rejected($+1) = sampl;
-        end
+        c = bruteforce_test(gray_imread(sampl.path), brain);
+        disp("path = "+sampl.path + " | class = " + string(c));
     end
 endfunction
 
@@ -23,7 +17,7 @@ function out = bruteforce_train(samples)
         sampl = samples(i);
         index = find(brain.class==sampl.class);
         class = brain.samples(index);
-        class($+1) = imread(sampl.path);
+        class($+1) = gray_imread(sampl.path);
         brain.samples(index) = class;
     end
     out = brain;
@@ -39,6 +33,7 @@ function [class, sampl] = bruteforce_test(imagem, brain)
            diffs(i,j) = bruteforce_diffImagem(imagem, sampl);
         end
     end
+    diffs(find(diffs==0))=%inf;
     [j,k] = min(diffs);
     cIndex = k(1);//indice da classe
     sIndex = k(2);//indice da imagem

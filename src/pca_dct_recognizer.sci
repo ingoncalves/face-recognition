@@ -1,15 +1,9 @@
-function [acepted, rejected] = pca_dct_recognizer(trainSamples, testSamples)
-    brain = pca_dct_dct_train(trainSamples);
-    acepted = list();
-    rejected = list();
+function pca_dct_recognizer(trainSamples, testSamples)
+    brain = pca_dct_train(trainSamples);
     for i=1: size(testSamples)
         sampl = testSamples(i);
-        c = pca_dct_test(imread(sampl.path), brain);
-        if c == sampl.class then
-            acepted($+1) = sampl;
-        else
-            rejected($+1) = sampl;
-        end
+        c = pca_dct_test(gray_imread(sampl.path), brain);
+        disp("path = "+sampl.path + " | class = " + string(c));
     end
 endfunction
 
@@ -23,7 +17,7 @@ function out = pca_dct_train(samples)
         sampl = samples(i);
         index = find(brain.class==sampl.class);
         class = brain.samples(index);
-        class($+1) = imread(sampl.path);
+        class($+1) = gray_imread(sampl.path);
         brain.samples(index) = class;
     end
 
@@ -31,6 +25,7 @@ function out = pca_dct_train(samples)
     for i=1:Nc
         nClass = brain.class(i);
         nSamples = brain.samples(i);
+        Ni = size(nSamples);
         A = zeros(Np*Cm,Ni);
         k=1;
         for j=1:Ni
@@ -38,7 +33,7 @@ function out = pca_dct_train(samples)
             imgd = dct(img);
             imgd(abs(imgd)<1)=0;
             imgd = dct(imgd, 1);
-            alpha = 0.8;
+            alpha = 10.0;
             imgr = (img + alpha*imgd)/(1+alpha);
             A(:,k) = imgr(:);
             k = k+1;
