@@ -13,5 +13,6 @@ Este software implementado em Scilab constitui-se de um reconhedor facial basead
 
 ###DPCA - Principal Component Analysis with Discrete Cosine Transform
 * Taxa média de reconhecimento de 97.57%
+* 
 ---------------
 Banco de dados de imagens utilizado: [FEI Face Database](http://fei.edu.br/~cet/facedatabase.html)
