@@ -6,10 +6,12 @@ Este software implementado em Scilab constitui-se de um reconhedor facial basead
 ##Métodos de Reconhecimento
 
 ###BruteForce
-* Taxa média de reconhecimento de 85%
+* Taxa média de reconhecimento de 94.86%
 
 ###PCA - Principal Component Analysis
-* Taxa média de reconhecimento de 95%
+* Taxa média de reconhecimento de 96.00%
 
+###DPCA - Principal Component Analysis with Discrete Cosine Transform
+* Taxa média de reconhecimento de 97.57%
 ---------------
 Banco de dados de imagens utilizado: [FEI Face Database](http://fei.edu.br/~cet/facedatabase.html)
